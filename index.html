@@ -10,6 +10,33 @@
   </head>
   <body>
 
+
+    <div class="container">
+      <div class="row">
+       <div class='col-md-4 col-md-offset-1'>
+        <form>
+          <div class="form-group">
+            <label for="number-input">Your Move</label>
+            <input type="number" class="form-control" id="number-input" placeholder="Choice...">
+          </div>
+          <button id="make-choice" type="submit" class="btn btn-default">Choose</button>
+        </form>
+      </div>
+      <div class='col-md-4 col-md-offset-1'>
+        <span for="number-input">AI Move</span>
+        <p id="ai-choice"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class='col-md-6 col-md-offset-3'>
+        <p id='results'></p>
+      </div>
+    </div>
+  </div>
+
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>

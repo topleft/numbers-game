@@ -2,9 +2,9 @@
 
 
 
-var Ai = function(name, strategy){
+var Ai = function(name){
   Player.call(this, name);
-  this.strategy  = null; //will be used to set a playing style, ie aggressive
+  this.strategy  = "aggressive"; //will be used to set a playing style, ie aggressive
   this.opponentMoves = []; // indoex 0 will be first move
 }
 
@@ -35,7 +35,8 @@ Ai.prototype.chooseNumber = function(opponentNumbers){
       choice = 8;
       return choice;
     }
-    else {// run evaluateChoices, if array is returned select high number}
+    else {
+      return evaluateChoices();
     }
 
   };
@@ -54,7 +55,9 @@ Ai.prototype.chooseNumber = function(opponentNumbers){
       choice = 4;
       return choice;
     }
-    else {// run evaluateChoices, if array is returned select middle number}
+    else {
+      return evaluateChoices();
+
     }
   };
 
@@ -72,21 +75,22 @@ Ai.prototype.chooseNumber = function(opponentNumbers){
       choice = 2;
       return choice;
     }
-    else {// run evaluateChoices, if array is returned select low number
+    else {
+      return evaluateChoices();
     };
   }
   this.turnCount ++;
 };
 
-Ai.prototype.calculateChoiceWeight = function(choice, opponentNumbers) {
+Ai.prototype.calculateChoiceWeight = function(choice) {
 
   var choiceWeight;
 
-  for (var i = 0; i < opponentNumbers.length; i++) {
+  for (var i = 0; i < this.opponentNumbers.length; i++) {
     // score 2
     if (opponentNumbers[i]+1 === choice) {choiceWeight += 2}
     // give 2
-    else if (opponentNumbers[i]-1 === choice) {choiceWeight -= 2}
+    else if (opponentNumbers[i]-1 === choice) {choiceWeight -= 3}
     // score 1
     else if (opponentNumbers[i] > choice) {choiceWeight ++}
     // give 1
@@ -96,20 +100,42 @@ Ai.prototype.calculateChoiceWeight = function(choice, opponentNumbers) {
   return {choice: choiceWeight}; // higher choiceWeight = more likely to score with that choice
 };
 
-Ai.prototype.evaluateChoices = function(opponentNumbers) {
+Ai.prototype.evaluateChoices = function() {
   var choices = [];
+  var bestChoices = [];
+  var max = 0;
 
   for (var i = 0; i < this.numbers.length; i++) {
-    choices.push(this.calculateChoiceWeight(this.numbers[i], opponentNumbers)
+    choices.push(this.calculateChoiceWeight(this.numbers[i], this.opponentNumbers));
   }
-  // return choice with highest choiceWeight, if duplicate choiceWeights return array of choices
+  for (var i = 0; i < choices.length; i++) {
+    if (choices[i].choiceWeight > max){
+      max = choices[i].choiceWeight;
+  };
+  for (var i = 0; i < choices.length; i++) {
+    if (choices[i].choiceWeight = max){
+      bestChoices.push(choices[i].choice)
+      }
+  };
+  if(bestChoices.length === 1){
+    return bestChoices[0];
+  }
+  else {
+    var num = Math.floor(Math.random()*bestChoices.length);
+    return bestChoices[num];
+  }
 };
 
-Ai.prototype.evaluateOpponentStrategy = function(opponentNumbers){
-  // analyze opponents moves and apply a def., mild, or aggressive strategy
+
 };
 
 
 
+// Ai.prototype.evaluateOpponentStrategy = function(opponentNumbers){
+//   // analyze opponents moves and apply a def., mild, or aggressive strategy
+// };
 
 
+
+
+// save each players move set and who won, min game is a set of 5 games
