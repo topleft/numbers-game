@@ -3,8 +3,13 @@
 $(document).on('ready', function() {
   console.log('sanity check!');
 
-  var game = new Game("ai", 10, "Pete", "AI", [1,2,3,4,5,6,7,8,9,10]);
+  var game = new Game("ai", 10, "Pete", "AI");
+  var count = 0;
 
-  game.createPlayerNumbers()
-  game.callTurn();
+  game.createPlayerNumbers();
+  while(!game.callTurn() || count< 15){
+    count ++;
+    console.log(count)
+    game.callTurn();
+  };
 });

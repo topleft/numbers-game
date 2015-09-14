@@ -17,106 +17,102 @@ Ai.prototype.updateOpponentMoves= function(move){
 
 // might need an discoverOppMove if we only have access to a resulting array
 
-Ai.prototype.chooseNumber = function(opponentNumbers){
+Ai.prototype.chooseNumber = function(){
 
   var choice;
 
-  if (this.strategy === 'defensive'){
-  //defensive: never give up 2 points, get rid of high numbers
-    if (this.turnCount === 0){
-      choice = 10;
-      return choice;
-    }
-    if (this.turnCount === 1){
-      choice = 9;
-      return choice;
-    }
-    if (this.turnCount === 2){
-      choice = 8;
-      return choice;
-    }
-    else {
-      return evaluateChoices();
-    }
+  // if (this.strategy === 'defensive'){
+  // //defensive: never give up 2 points, get rid of high numbers
+  //   if (this.turnCount === 0){
+  //     choice = 10;
+  //   }
+  //   if (this.turnCount === 1){
+  //     choice = 9;
+  //   }
+  //   if (this.turnCount === 2){
+  //     choice = 8;
+  //   }
+  //   else {
+  //     choice = this.evaluateChoices();
+  //   }
 
-  };
+  // };
 
-  if (this.strategy === 'mild'){
-  // mild: never give up 2 points, go for score at good probabilities
-    if (this.turnCount === 0){
-      choice = 4;
-      return choice;
-    }
-    if (this.turnCount === 1){
-      choice = 4;
-      return choice;
-    }
-    if (this.turnCount === 2){
-      choice = 4;
-      return choice;
-    }
-    else {
-      return evaluateChoices();
+  // if (this.strategy === 'mild'){
+  // // mild: never give up 2 points, go for score at good probabilities
+  //   if (this.turnCount === 0){
+  //     choice = 4;
+  //   }
+  //   if (this.turnCount === 1){
+  //     choice = 4;
+  //   }
+  //   if (this.turnCount === 2){
+  //     choice = 4;
+  //   }
+  //   else {
+  //     choice = this.evaluateChoices();
 
-    }
-  };
+  //   }
+  // };
 
   if (this.strategy === 'aggressive'){
   // aggressive: go for points, use low numbers first
     if (this.turnCount === 0){
-      choice = 3;
-      return choice;
-    }
-    if (this.turnCount === 1){
-      choice = 1;
-      return choice;
-    }
-    if (this.turnCount === 2){
       choice = 2;
-      return choice;
+    }
+    else if (this.turnCount === 1){
+      choice = 3;
+    }
+    else if (this.turnCount === 2){
+      choice = 1;
     }
     else {
-      return evaluateChoices();
+      choice = this.evaluateChoices();
     };
   }
+  console.log("choice: "+choice)
+  this.choice = choice;
   this.turnCount ++;
 };
 
 Ai.prototype.calculateChoiceWeight = function(choice) {
 
   var choiceWeight;
-
+  console.log("num: "+ this.opponentNumbers)
   for (var i = 0; i < this.opponentNumbers.length; i++) {
     // score 2
-    if (opponentNumbers[i]+1 === choice) {choiceWeight += 2}
+    if (opponentNumbers[i]+1 === choice) {choiceWeight += 2;}
     // give 2
-    else if (opponentNumbers[i]-1 === choice) {choiceWeight -= 3}
+    else if (opponentNumbers[i]-1 === choice) {choiceWeight -= 3;}
     // score 1
-    else if (opponentNumbers[i] > choice) {choiceWeight ++}
+    else if (opponentNumbers[i] > choice) {choiceWeight ++;}
     // give 1
-    else if (opponentNumbers[i] < choice) {choiceWeight --}
+    else if (opponentNumbers[i] < choice) {choiceWeight --;}
     }
-
+  console.log({choice: choiceWeight});
   return {choice: choiceWeight}; // higher choiceWeight = more likely to score with that choice
 };
 
 Ai.prototype.evaluateChoices = function() {
+  console.log("inside eval")
   var choices = [];
   var bestChoices = [];
   var max = 0;
-
+  // array of {choice:choiceweights}
   for (var i = 0; i < this.numbers.length; i++) {
-    choices.push(this.calculateChoiceWeight(this.numbers[i], this.opponentNumbers));
+    choices.push(this.calculateChoiceWeight(this.numbers[i]));
   }
   for (var i = 0; i < choices.length; i++) {
     if (choices[i].choiceWeight > max){
       max = choices[i].choiceWeight;
+    }
   };
   for (var i = 0; i < choices.length; i++) {
     if (choices[i].choiceWeight = max){
       bestChoices.push(choices[i].choice)
-      }
+    }
   };
+  console.log(bestChoices);
   if(bestChoices.length === 1){
     return bestChoices[0];
   }
@@ -124,7 +120,6 @@ Ai.prototype.evaluateChoices = function() {
     var num = Math.floor(Math.random()*bestChoices.length);
     return bestChoices[num];
   }
-};
 
 
 };
